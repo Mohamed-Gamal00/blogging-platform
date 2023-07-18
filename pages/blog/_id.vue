@@ -36,28 +36,37 @@ export default {
   data: () => ({
     reveal: false,
   }),
-  head(){
-    return{
+  head() {
+    return {
       title: this.$store.state.selectedPost.title,
       meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: this.$store.state.selectedPost.body,
-          }
-        ]
-    }
+        {
+          hid: "description",
+          name: "description",
+          content: this.$store.state.selectedPost.body,
+        },
+      ],
+    };
   },
   validate({ params }) {
     return !isNaN(params.id);
   },
-  async asyncData({ $axios, store, params }) {
+  // async asyncData({ $axios, store, params }) {
+  //   if (store.state.selectedPost && store.state.selectedPost.id == params.id)
+  //     return true;
+  //   const response = await $axios.$get(
+  //     `/posts/${params.id}`
+  //   );
+  //   return store.commit("updateSelectedPost", response);
+  // },
+  fetch({ $axios, store, params }) {
     if (store.state.selectedPost && store.state.selectedPost.id == params.id)
       return true;
-    const response = await $axios.$get(
-      `https://jsonplaceholder.typicode.com/posts/${params.id}`
-    );
-    return store.commit("updateSelectedPost", response);
+    return $axios
+      .$get(`/posts/${params.id}`)
+      .then((res) => {
+        store.commit("updateSelectedPost", res);
+      });
   },
 };
 </script>

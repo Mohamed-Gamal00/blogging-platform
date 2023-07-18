@@ -1,71 +1,71 @@
 <template>
-  <v-card class="mx-auto">
-    <v-card-text>
-      <div>Word of the Day</div>
-      <p class="text-h4 text--primary">
-        {{ $store.state.selectedPost.title }} + {{ $route.params.id }}
-      </p>
-      <p>adjective</p>
-      <div class="text--primary">{{ $store.state.selectedPost.body }}</div>
-    </v-card-text>
-    <v-expand-transition>
-      <v-card
-        v-if="reveal"
-        class="transition-fast-in-fast-out v-card--reveal"
-        style="height: 100%"
-      >
-        <v-card-text class="pb-0">
-          <p class="text-h4 text--primary">Origin</p>
-          <p>
-            late 16th century (as a noun denoting a place where alms were
-            distributed): from medieval Latin eleemosynarius, from late Latin
-            eleemosyna ‘alms’, from Greek eleēmosunē ‘compassion’
-          </p>
-        </v-card-text>
-        <v-card-actions class="pt-0">
-          <v-btn text color="teal accent-4" @click="reveal = false">
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-expand-transition>
-  </v-card>
+  <div>
+    <v-card class="mx-auto" max-width="344" outlined>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="text-overline mb-4">
+            <span> <v-icon dark left> mdi-post </v-icon></span>OVERLINE
+          </div>
+          <v-list-item-title class="text mb-1">
+            <p class="mt-0 fw-bold">
+              {{ post.title }}
+            </p>
+          </v-list-item-title>
+          <v-list-item-subtitle
+            >Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle
+          >
+        </v-list-item-content>
+
+        <v-list-item-avatar tile size="80" color="white">
+          <v-img
+            :aspect-ratio="16 / 9"
+            src="https://img.freepik.com/free-vector/blogging-fun-content-creation-online-streaming-video-blog-young-girl-making-selfie-social-network-sharing-feedback-self-promotion-strategy-vector-isolated-concept-metaphor-illustration_335657-855.jpg?w=740&t=st=1689673415~exp=1689674015~hmac=d8f3d686b883989a7a7737ed3af6721eb5f2a3480c754e6f2dee99894473d42d"
+          ></v-img>
+        </v-list-item-avatar>
+      </v-list-item>
+
+      <v-card-actions>
+        <template v-if="isAdmin">
+          <div>
+            <nuxt-link :to="`admin/blog/${post.id}/edit`">
+              <v-btn outlined rounded text color="green"> Edit </v-btn>
+            </nuxt-link>
+            <v-btn outlined rounded text color="error"> Delete </v-btn>
+           </div>
+        </template>
+        <template v-else>
+          <div>
+            <nuxt-link :to="`/blog/${post.id}`">
+              <v-btn outlined rounded text>
+                <span @click="updateSelectedPost(post)"> read more </span>
+              </v-btn>
+            </nuxt-link>
+          </div>
+        </template>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
+
 <script>
 export default {
-  data: () => ({
-    reveal: false,
-  }),
-  head(){
-    return{
-      title: this.$store.state.selectedPost.title,
-      meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: this.$store.state.selectedPost.body,
-          }
-        ]
-    }
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: false,
+    },
   },
-  validate({ params }) {
-    return !isNaN(params.id);
-  },
-  async asyncData({ $axios, store, params }) {
-    if (store.state.selectedPost && store.state.selectedPost.id == params.id)
-      return true;
-    const response = await $axios.$get(
-      `/posts/${params.id}`
-    );
-    return store.commit("updateSelectedPost", response);
+
+  methods: {
+    updateSelectedPost(post) {
+      this.$store.commit("updateSelectedPost", post);
+    },
   },
 };
 </script>
-<style>
-.v-card--reveal {
-  bottom: 0;
-  opacity: 1 !important;
-  position: absolute;
-  width: 100%;
-}
-</style>
+
+<style lang="scss" scoped></style>
