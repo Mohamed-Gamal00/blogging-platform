@@ -17,9 +17,14 @@ export default {
     PostCard,
   },
   fetch({ $axios, store }) {
-    return $axios.$get(`/posts`).then((res) => {
-      store.commit("updatePosts", res);
-    });
+    return $axios
+      .$get(`/posts`)
+      .then((res) => {
+        store.commit("updatePosts", res);
+      })
+      .catch(() => {
+        alert("Error: Network Error");
+      });
   },
 };
 </script>
