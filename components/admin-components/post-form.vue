@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center">Add post</h1>
+    <!-- <h1 class="text-center">{{ address }}"</h1> -->
     <v-form ref="form" v-model="valid" @submit.prevent="submit">
       <v-text-field
         class="mb-10"
@@ -52,6 +52,7 @@ export default {
           // (v) => v.length <= 10 || "Body must be less than 10 characters",
         ],
       },
+      address:''
     };
   },
   mounted() {

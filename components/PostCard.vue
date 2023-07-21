@@ -36,6 +36,8 @@
           >
             Edit
           </v-btn>
+          &nbsp;
+          &nbsp;
           <!-- delete -->
           <appModalVue
             button-title="Delete"
